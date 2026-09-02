@@ -1,0 +1,32 @@
+{
+  "name": "habitat",
+  "private": true,
+  "packageManager": "pnpm@10.15.1",
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,green \"pnpm --filter @habitat/web dev\" \"pnpm --filter @habitat/api dev\"",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r typecheck",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:generate": "pnpm --filter @habitat/api prisma:generate",
+    "db:migrate": "pnpm --filter @habitat/api prisma:migrate"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.41.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ]
+  }
+}
