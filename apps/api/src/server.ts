@@ -4,12 +4,14 @@ import { env } from './config/env.js';
 import { prisma } from './lib/prisma.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { healthRouter } from './routes/health.js';
+import { animalsRouter } from './routes/animals.routes.js';
 
 const app = express();
 
 app.use(cors({ origin: env.CORS_ORIGIN }));
 app.use(express.json());
 app.use('/health', healthRouter);
+app.use('/animals', animalsRouter);
 app.use(errorHandler);
 
 async function start(): Promise<void> {

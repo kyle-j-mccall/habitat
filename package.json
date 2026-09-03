@@ -9,7 +9,8 @@
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",
     "db:generate": "pnpm --filter @habitat/api prisma:generate",
-    "db:migrate": "pnpm --filter @habitat/api prisma:migrate"
+    "db:migrate": "pnpm --filter @habitat/api prisma:migrate",
+    "db:seed": "pnpm --filter @habitat/api exec prisma db seed"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",
