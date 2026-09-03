@@ -14,12 +14,20 @@ export async function createAnimal(input: CreateAnimalInput) {
 export async function getAnimals() {
   return prisma.animal.findMany({
     orderBy: { name: 'asc' },
+    include: {
+      species: true,
+      enclosure: true,
+    },
   });
 }
 
 export async function getAnimalById(id: number) {
   return prisma.animal.findUnique({
     where: { id },
+    include: {
+      species: true,
+      enclosure: true,
+    },
   });
 }
 

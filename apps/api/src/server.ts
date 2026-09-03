@@ -5,6 +5,9 @@ import { prisma } from './lib/prisma.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { healthRouter } from './routes/health.js';
 import { animalsRouter } from './routes/animals.routes.js';
+import { speciesRouter } from './routes/species.routes.js';
+import { enclosuresRouter } from './routes/enclosures.routes.js';
+
 
 const app = express();
 
@@ -12,6 +15,8 @@ app.use(cors({ origin: env.CORS_ORIGIN }));
 app.use(express.json());
 app.use('/health', healthRouter);
 app.use('/animals', animalsRouter);
+app.use('/species', speciesRouter);
+app.use('/enclosures', enclosuresRouter);
 app.use(errorHandler);
 
 async function start(): Promise<void> {
