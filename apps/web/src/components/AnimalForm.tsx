@@ -1,18 +1,37 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SpeciesSelect } from './SpeciesSelect';
+import { EnclosureSelect } from './EnclosureSelect';
+import { createAnimal } from '@/lib/api';
 
 export function AnimalForm() {
   const [name, setName] = useState('');
+  const [speciesId, setSpeciesId] = useState('');
+  const [enclosureId, setEnclosureId] = useState('');
+  const queryClient = useQueryClient();
+
+  const createAnimalMutation = useMutation({
+    mutationFn: createAnimal,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['animals'] });
+      setName('');
+      setSpeciesId('');
+      setEnclosureId('');
+    },
+  });
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        console.log('Create animal:', { name });
-        setName('');
+        createAnimalMutation.mutate({
+          name,
+          speciesId: Number(speciesId),
+          enclosureId: Number(enclosureId),
+        });
       }}
       className="space-y-4"
     >
@@ -25,15 +44,31 @@ export function AnimalForm() {
           placeholder="Lion"
           required
         />
-        <SpeciesSelect
-          species={[{ id: 1, commonName: 'Fox' }, { id: 2, commonName: 'Bear' }]}
-          value="unknown"
-          onChange={(value) => console.log('Selected species:', value)}
-        />
       </div>
-      <Button type="submit" disabled={!name.trim()}>
-        Create animal
+      <div className="space-y-2">
+        <Label htmlFor="animal-species">Species</Label>
+        <SpeciesSelect value={speciesId} onChange={setSpeciesId} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="animal-enclosure">Enclosure</Label>
+        <EnclosureSelect value={enclosureId} onChange={setEnclosureId} />
+      </div>
+      <Button
+        type="submit"
+        disabled={
+          !name.trim() ||
+          !speciesId ||
+          !enclosureId ||
+          createAnimalMutation.isPending
+        }
+      >
+        {createAnimalMutation.isPending ? 'Creating…' : 'Create animal'}
       </Button>
+      {createAnimalMutation.isError && (
+        <p className="text-sm text-destructive">
+          {createAnimalMutation.error.message}
+        </p>
+      )}
     </form>
   );
 }

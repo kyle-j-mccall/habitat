@@ -1,7 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { z } from 'zod';
 import * as AnimalsService from '../services/animals.service.js';
-import { animalIdParams, createAnimalBody } from '../schemas/animals.schemas.js';
+import { animalIdParams } from '../schemas/animals.schemas.js';
+import { createAnimalBody } from '@habitat/shared';
 
 export async function getAllAnimals(_req: Request, res: Response, next: NextFunction) {
   try {

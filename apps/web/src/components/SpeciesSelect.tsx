@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import {
   Select,
   SelectContent,
@@ -5,38 +6,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {  useState } from 'react';
+import { listSpecies } from '@/lib/api';
 
-type Species = { id: number; commonName: string };
-  type Props = {
-    species: Species[];
-    value: string;                          // controlled from parent (string, since form values are strings)
-    onChange: (value: string) => void;
-    disabled?: boolean;
-  };
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+};
 
-export function SpeciesSelect({ species, value, onChange, disabled }: Props) {
-  const [selectedSpecies, setSelectedSpecies] = useState<string | null>(value);
+export function SpeciesSelect({ value, onChange, disabled }: Props) {
+  const speciesQuery = useQuery({
+    queryKey: ['species'],
+    queryFn: listSpecies,
+  });
+
+  if (speciesQuery.isError) {
+    return <p className="text-sm text-destructive">Could not load species.</p>;
+  }
 
   return (
     <Select
-      value={selectedSpecies ?? 'unknown'}
-      onValueChange={(newValue: string | null) => {
-        setSelectedSpecies(newValue);
-        onChange(newValue ?? '');
-      }}
-      disabled={disabled}
+      value={value}
+      onValueChange={(next) => onChange(next ?? '')}
+      disabled={disabled || speciesQuery.isPending}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a species" />
+        <SelectValue
+          placeholder={speciesQuery.isPending ? 'Loading species…' : 'Select a species'}
+        />
       </SelectTrigger>
       <SelectContent>
-        {species.map((s) => (
-          <SelectItem key={s.id} value={s.id.toString()}>
-            {s.commonName}
+        {speciesQuery.data?.map((species) => (
+          <SelectItem key={species.id} value={species.id.toString()}>
+            {species.commonName}
           </SelectItem>
         ))}
       </SelectContent>
     </Select>
   );
-} 
+}

@@ -1,17 +1,16 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import { useQuery } from '@tanstack/react-query';
+import { fetchAnimals } from '@/lib/api';
 
-type AnimalRow = {
-  id: number;
-  name: string;
-  species: { commonName: string };
-  enclosure: { name: string };
-};
 
-type Props = {
-  animals: AnimalRow[];
-};
 
-export function AnimalsList({ animals }: Props) {
+export function AnimalsList() {
+  const animalsQuery = useQuery({
+    queryKey: ['animals'],
+    queryFn: fetchAnimals,
+  });
+
+
   return (
     <Table>
         <TableHeader>
@@ -22,12 +21,12 @@ export function AnimalsList({ animals }: Props) {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {animals.length === 0 && (
+            {animalsQuery.data?.length === 0 && (
                 <TableRow>
                     <TableCell colSpan={3}>No animals found.</TableCell>
                 </TableRow>
             )}
-            {animals.map((animal) => (  
+            {animalsQuery.data?.map((animal) => (
                 <TableRow key={animal.id}>
                     <TableCell>{animal.name}</TableCell>
                     <TableCell>{animal.species.commonName}</TableCell>

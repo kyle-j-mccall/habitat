@@ -1,7 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { z } from 'zod';
 import * as EnclosuresService from '../services/enclosures.service.js';
-import type { createEnclosureBody, enclosureIdParams } from '../schemas/enclosures.schema.js';
+import type { createEnclosureBody } from '@habitat/shared';
+import type { enclosureIdParams } from '../schemas/enclosures.schema.js';
 
 export async function getAllEnclosures(_req: Request, res: Response, next: NextFunction) {
   try {

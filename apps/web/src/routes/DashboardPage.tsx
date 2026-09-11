@@ -39,11 +39,6 @@ export function DashboardPage() {
         </CardHeader>
         <CardContent>
           <AnimalsList
-            animals={[
-              { id: 1, name: 'Rex', species: { commonName: 'Red Fox' }, enclosure: { name: 'Grasslands' } },
-              { id: 2, name: 'Luna', species: { commonName: 'Grey Wolf' }, enclosure: { name: 'Forest' } },
-              { id: 3, name: 'Otis', species: { commonName: 'Barn Owl' }, enclosure: { name: 'Aviary' } },
-            ]}
           />
         </CardContent>
       </Card>

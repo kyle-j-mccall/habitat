@@ -1,5 +1,5 @@
 import { prisma } from '../lib/prisma.js';
-import type { CreateAnimalInput } from '../schemas/animals.schemas.js';
+import type { CreateAnimalInput } from '@habitat/shared';
 
 export async function createAnimal(input: CreateAnimalInput) {
   return prisma.animal.create({
