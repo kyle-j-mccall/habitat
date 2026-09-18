@@ -42,8 +42,6 @@ export const animalListSchema = z.array(animalSchema);
 
 export type Animal = z.infer<typeof animalSchema>;
 
-
-
 export const createEnclosureBody = z.object({
   name: z.string().min(1),
 });
@@ -53,6 +51,7 @@ export type CreateEnclosureInput = z.infer<typeof createEnclosureBody>;
 export const enclosureSchema = z.object({
   id: z.number(),
   name: z.string(),
+  animals: z.array(animalSchema),
 });
 
 export const enclosureListSchema = z.array(enclosureSchema);

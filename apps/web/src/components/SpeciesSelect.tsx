@@ -24,6 +24,8 @@ export function SpeciesSelect({ value, onChange, disabled }: Props) {
     return <p className="text-sm text-destructive">Could not load species.</p>;
   }
 
+  const selectedSpecies = speciesQuery.data?.find((species) => species.id.toString() === value);
+
   return (
     <Select
       value={value}
@@ -33,7 +35,9 @@ export function SpeciesSelect({ value, onChange, disabled }: Props) {
       <SelectTrigger className="w-full">
         <SelectValue
           placeholder={speciesQuery.isPending ? 'Loading species…' : 'Select a species'}
-        />
+        >
+          {selectedSpecies?.commonName}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {speciesQuery.data?.map((species) => (

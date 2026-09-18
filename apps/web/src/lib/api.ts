@@ -37,7 +37,9 @@ export async function fetchAnimals(): Promise<Animal[]> {
   const response = await fetch(`${apiUrl}/animals`);
 
   if (!response.ok) {
-    throw new Error(`Fetch animals request failed with status ${response.status}`);
+    throw new Error(
+      `Fetch animals request failed with status ${response.status}`,
+    );
   }
 
   return animalListSchema.parse(await response.json());
@@ -63,11 +65,27 @@ export async function createAnimal(animal: CreateAnimalInput): Promise<void> {
   });
 
   if (!response.ok) {
-    throw new Error(`Create animal request failed with status ${response.status}`);
+    throw new Error(
+      `Create animal request failed with status ${response.status}`,
+    );
   }
 }
 
-export async function createEnclosure(enclosure: CreateEnclosureInput): Promise<void> {
+export async function deleteAnimal(animalId: number): Promise<void> {
+  const response = await fetch(`${apiUrl}/animals/${animalId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Delete animal request failed with status ${response.status}`,
+    );
+  }
+}
+
+export async function createEnclosure(
+  enclosure: CreateEnclosureInput,
+): Promise<void> {
   const response = await fetch(`${apiUrl}/enclosures`, {
     method: 'POST',
     headers: {
@@ -77,6 +95,20 @@ export async function createEnclosure(enclosure: CreateEnclosureInput): Promise<
   });
 
   if (!response.ok) {
-    throw new Error(`Create enclosure request failed with status ${response.status}`);
+    throw new Error(
+      `Create enclosure request failed with status ${response.status}`,
+    );
+  }
+}
+
+export async function deleteEnclosure(enclosureId: number): Promise<void> {
+  const response = await fetch(`${apiUrl}/enclosures/${enclosureId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Delete enclosure request failed with status ${response.status}`,
+    );
   }
 }

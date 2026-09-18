@@ -24,6 +24,8 @@ export function EnclosureSelect({ value, onChange, disabled }: Props) {
     return <p className="text-sm text-destructive">Could not load enclosures.</p>;
   }
 
+  const selectedEnclosure = enclosuresQuery.data?.find((enclosure) => enclosure.id.toString() === value);
+
   const isEmpty = !enclosuresQuery.isPending && enclosuresQuery.data?.length === 0;
 
   return (
@@ -41,7 +43,9 @@ export function EnclosureSelect({ value, onChange, disabled }: Props) {
                 ? 'Create an enclosure first'
                 : 'Select an enclosure'
           }
-        />
+        >
+          {selectedEnclosure?.name}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {enclosuresQuery.data?.map((enclosure) => (
