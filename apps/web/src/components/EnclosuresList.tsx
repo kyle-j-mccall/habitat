@@ -8,7 +8,18 @@ import {
 } from './ui/table';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteEnclosure, listEnclosures } from '@/lib/api';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog';
 
 export function EnclosuresList() {
   const queryClient = useQueryClient();
@@ -21,6 +32,7 @@ export function EnclosuresList() {
     mutationFn: deleteEnclosure,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['enclosures'] });
+      queryClient.invalidateQueries({ queryKey: ['animals'] });
     },
   });
 
@@ -39,29 +51,59 @@ export function EnclosuresList() {
             <TableCell colSpan={3}>No enclosures found.</TableCell>
           </TableRow>
         )}
-        {enclosuresQuery.data?.map((enclosure) => (
-          <TableRow key={enclosure.id}>
-            <TableCell>{enclosure.name}</TableCell>
-            <TableCell>
-              {enclosure.animals.length === 0 ? (
-                <span className="text-muted-foreground">—</span>
-              ) : (
-                enclosure.animals.map((a) => a.name).join(', ')
-              )}
-            </TableCell>
-
-            <TableCell>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => deleteEnclosureMutation.mutate(enclosure.id)}
-                disabled={deleteEnclosureMutation.isPending}
-              >
-                Delete
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {enclosuresQuery.data?.map((enclosure) => {
+          const animalCount = enclosure.animals.length;
+          return (
+            <TableRow key={enclosure.id}>
+              <TableCell>{enclosure.name}</TableCell>
+              <TableCell>
+                {animalCount === 0 ? (
+                  <span className="text-muted-foreground">—</span>
+                ) : (
+                  enclosure.animals.map((a) => a.name).join(', ')
+                )}
+              </TableCell>
+              <TableCell>
+                <AlertDialog>
+                  <AlertDialogTrigger
+                    render={
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        disabled={deleteEnclosureMutation.isPending}
+                      >
+                        Delete
+                      </Button>
+                    }
+                  />
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Delete “{enclosure.name}”?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {animalCount === 0
+                          ? 'This action cannot be undone.'
+                          : `${animalCount} ${animalCount === 1 ? 'animal' : 'animals'} will be marked as unassigned. This action cannot be undone.`}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className={buttonVariants({ variant: 'destructive' })}
+                        onClick={() =>
+                          deleteEnclosureMutation.mutate(enclosure.id)
+                        }
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

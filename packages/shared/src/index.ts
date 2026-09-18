@@ -18,7 +18,7 @@ export type Species = z.infer<typeof speciesSchema>;
 export const createAnimalBody = z.object({
   name: z.string().min(1),
   speciesId: z.number().int().positive(),
-  enclosureId: z.number().int().positive(),
+  enclosureId: z.number().int().positive().nullable(),
 });
 
 export type CreateAnimalInput = z.infer<typeof createAnimalBody>;
@@ -31,11 +31,11 @@ export const animalSchema = z.object({
     id: z.number(),
     commonName: z.string(),
   }),
-  enclosureId: z.number().int().positive(),
+  enclosureId: z.number().int().positive().nullable(),
   enclosure: z.object({
     id: z.number(),
     name: z.string(),
-  }),
+  }).nullable(),
 });
 
 export const animalListSchema = z.array(animalSchema);

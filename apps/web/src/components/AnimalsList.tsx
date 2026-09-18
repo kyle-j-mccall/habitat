@@ -44,7 +44,11 @@ export function AnimalsList() {
           <TableRow key={animal.id}>
             <TableCell>{animal.name}</TableCell>
             <TableCell>{animal.species.commonName}</TableCell>
-            <TableCell>{animal.enclosure.name}</TableCell>
+            <TableCell>
+              {animal.enclosure?.name ?? (
+                <span className="text-muted-foreground">Unassigned</span>
+              )}
+            </TableCell>
             <TableCell>
               <Button
                 variant="destructive"

@@ -30,7 +30,7 @@ export function AnimalForm() {
         createAnimalMutation.mutate({
           name,
           speciesId: Number(speciesId),
-          enclosureId: Number(enclosureId),
+          enclosureId: enclosureId ? Number(enclosureId) : null,
         });
       }}
       className="space-y-4"
@@ -50,7 +50,7 @@ export function AnimalForm() {
         <SpeciesSelect value={speciesId} onChange={setSpeciesId} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="animal-enclosure">Enclosure</Label>
+        <Label htmlFor="animal-enclosure">Enclosure (optional)</Label>
         <EnclosureSelect value={enclosureId} onChange={setEnclosureId} />
       </div>
       <Button
@@ -58,7 +58,6 @@ export function AnimalForm() {
         disabled={
           !name.trim() ||
           !speciesId ||
-          !enclosureId ||
           createAnimalMutation.isPending
         }
       >

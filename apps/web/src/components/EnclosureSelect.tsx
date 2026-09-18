@@ -40,7 +40,7 @@ export function EnclosureSelect({ value, onChange, disabled }: Props) {
             enclosuresQuery.isPending
               ? 'Loading enclosures…'
               : isEmpty
-                ? 'Create an enclosure first'
+                ? 'No enclosures yet — leave blank'
                 : 'Select an enclosure'
           }
         >

@@ -5,8 +5,8 @@ export async function createAnimal(input: CreateAnimalInput) {
   return prisma.animal.create({
     data: {
       name: input.name,
-      species:   { connect: { id: input.speciesId } },
-      enclosure: { connect: { id: input.enclosureId } },
+      speciesId: input.speciesId,
+      enclosureId: input.enclosureId,
     },
   });
 }
@@ -36,8 +36,8 @@ export async function updateAnimal(id: number, input: CreateAnimalInput) {
     where: { id },
     data: {
       name: input.name,
-      species:   { connect: { id: input.speciesId } },
-      enclosure: { connect: { id: input.enclosureId } },
+      speciesId: input.speciesId,
+      enclosureId: input.enclosureId,
     },
   });
 }
