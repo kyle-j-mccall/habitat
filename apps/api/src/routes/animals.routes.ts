@@ -14,9 +14,14 @@
  */
 
 import { Router } from 'express';
-import { validateParams } from '../middleware/validate.js';
-import { getAllAnimals, getAnimal, postAnimal } from '../controllers/animals.controller.js';
+import { validateBody, validateParams } from '../middleware/validate.js';
+import {
+  getAllAnimals,
+  getAnimal,
+  postAnimal,
+} from '../controllers/animals.controller.js';
 import { animalIdParams } from '../schemas/animals.schemas.js';
+import { createAnimalBody } from '@habitat/shared';
 
 /**
  * SCHEMA: params for routes like /animals/:id
@@ -45,6 +50,4 @@ animalsRouter.get('/', getAllAnimals);
 //   3. If valid   → getAnimal runs with req.params.id ALREADY a number
 animalsRouter.get('/:id', validateParams(animalIdParams), getAnimal);
 
-animalsRouter.post('/', postAnimal);
-
-
+animalsRouter.post('/', validateBody(createAnimalBody), postAnimal);

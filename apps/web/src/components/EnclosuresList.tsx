@@ -90,12 +90,15 @@ export function EnclosuresList() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
+                        disabled={deleteEnclosureMutation.isPending}
                         className={buttonVariants({ variant: 'destructive' })}
                         onClick={() =>
                           deleteEnclosureMutation.mutate(enclosure.id)
                         }
                       >
-                        Delete
+                        {deleteEnclosureMutation.isPending
+                          ? 'Deleting...'
+                          : 'Delete'}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

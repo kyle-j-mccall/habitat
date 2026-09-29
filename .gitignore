@@ -9,3 +9,8 @@ coverage/
 .pnpm-store/
 *.tsbuildinfo
 
+# Firebase service account credentials (secret — never commit)
+*firebase-service-account*.json
+*serviceAccountKey*.json
+*-firebase-adminsdk-*.json
+
