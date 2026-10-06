@@ -65,7 +65,7 @@ export function AuthForm() {
           <span>{form.formState.errors.password.message}</span>
         )}
         <button type="submit">{isSignUp ? 'Sign Up' : 'Login'}</button>
-        <Button onClick={() => setIsSignUp(!isSignUp)}>
+        <Button type="button" onClick={() => setIsSignUp(!isSignUp)}>
           {isSignUp
             ? 'Already have an account? Sign In'
             : 'No Account? Sign Up'}
