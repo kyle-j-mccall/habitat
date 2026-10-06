@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import { HomePage } from '../routes/HomePage';
 import { DashboardPage } from '../routes/DashboardPage';
+import { AuthPage } from '../routes/AuthPage';
 
 export function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/" element={<DashboardPage />} />
+      <Route path="/auth" element={<AuthPage />} />
     </Routes>
   );
 }

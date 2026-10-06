@@ -1,12 +1,23 @@
-export type SignInInput = {
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
+import { auth } from './firebase';
+
+export type AuthInput = {
   email: string;
   password: string;
 };
 
-export async function signIn(input: SignInInput) {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  if (input.password === 'bad') {
-    throw new Error('Invalid credentials');
-  }
-  return { id: 'stub-user-1', email: input.email };
+export async function signIn({ email, password }: AuthInput) {
+  return await signInWithEmailAndPassword(auth, email, password);
+}
+
+export async function signUp({ email, password }: AuthInput) {
+  return await createUserWithEmailAndPassword(auth, email, password);
+}
+
+export async function signOutUser() {
+  return await signOut(auth);
 }

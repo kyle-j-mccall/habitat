@@ -1,22 +1,25 @@
 import { Input } from './ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
-import { signIn } from '@/lib/auth';
+import { signIn, signUp } from '@/lib/auth';
+import { Button } from '@base-ui/react';
 
 const signInSchema = z.object({
-  email: z.string().min(1, 'Username is required'),
+  email: z.string().min(1, 'Email is required'),
   password: z.string().min(1, 'Password is required'),
 });
 export function AuthForm() {
+  const [isSignUp, setIsSignUp] = useState(false);
   const form = useForm({
     resolver: zodResolver(signInSchema),
   });
 
   const signInMutation = useMutation({
-    mutationFn: signIn,
+    mutationFn: isSignUp ? signUp : signIn,
     onSuccess: () => {
       console.log('Sign in successful');
     },
@@ -33,20 +36,19 @@ export function AuthForm() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
             </FormItem>
           )}
         />
-        {form.formState.errors.username && (
-          <span>{form.formState.errors.username.message}</span>
+        {form.formState.errors.email && (
+          <span>{form.formState.errors.email.message}</span>
         )}
-        <FormLabel>Password</FormLabel>
         <FormField
           control={form.control}
           name="password"
@@ -62,7 +64,12 @@ export function AuthForm() {
         {form.formState.errors.password && (
           <span>{form.formState.errors.password.message}</span>
         )}
-        <button type="submit">Login</button>
+        <button type="submit">{isSignUp ? 'Sign Up' : 'Login'}</button>
+        <Button onClick={() => setIsSignUp(!isSignUp)}>
+          {isSignUp
+            ? 'Already have an account? Sign In'
+            : 'No Account? Sign Up'}
+        </Button>
       </form>
     </Form>
   );
