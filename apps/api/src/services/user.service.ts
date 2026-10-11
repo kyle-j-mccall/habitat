@@ -8,7 +8,7 @@ type UpsertUserInput = {
 };
 
 export async function upsertUser(input: UpsertUserInput) {
-  await prisma.dbUser.upsert({
+  return prisma.dbUser.upsert({
     where: { firebaseId: input.firebaseId },
     create: input,
     update: { email: input.email },

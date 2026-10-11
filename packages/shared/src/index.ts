@@ -48,6 +48,18 @@ export const createEnclosureBody = z.object({
 
 export type CreateEnclosureInput = z.infer<typeof createEnclosureBody>;
 
+export const dbUserSchema = z.object({
+  id: z.number(),
+  firebaseId: z.string(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  email: z.email(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+});
+
+export type DbUser = z.infer<typeof dbUserSchema>;
+
 export const enclosureSchema = z.object({
   id: z.number(),
   name: z.string(),

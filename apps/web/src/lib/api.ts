@@ -3,13 +3,16 @@ import {
   speciesListSchema,
   animalListSchema,
   enclosureListSchema,
+  dbUserSchema,
   type HealthResponse,
   type Species,
   type CreateAnimalInput,
   type CreateEnclosureInput,
   type Animal,
   type Enclosure,
+  type DbUser,
 } from '@habitat/shared';
+import { auth } from './firebase';
 
 const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
@@ -111,4 +114,23 @@ export async function deleteEnclosure(enclosureId: number): Promise<void> {
       `Delete enclosure request failed with status ${response.status}`,
     );
   }
+}
+
+export async function fetchUser(): Promise<DbUser> {
+  const token = await auth.currentUser?.getIdToken();
+  if (!token) {
+    throw new Error('Not signed in');
+  }
+
+  const response = await fetch(`${apiUrl}/user/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Fetch user request failed with status ${response.status}`);
+  }
+
+  return dbUserSchema.parse(await response.json());
 }

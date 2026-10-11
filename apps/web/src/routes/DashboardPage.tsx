@@ -2,8 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EnclosureForm } from '@/components/EnclosureForm';
 import { AnimalForm } from '@/components/AnimalForm';
 import { AnimalsList } from '@/components/AnimalsList';
+import { useQuery } from '@tanstack/react-query';
+import { fetchUser } from '@/lib/api';
 
 export function DashboardPage() {
+  const userQuery = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: fetchUser,
+  });
+
   return (
     <main className="mx-auto max-w-5xl space-y-6 p-6">
       <header>
@@ -11,6 +18,19 @@ export function DashboardPage() {
         <p className="text-muted-foreground">
           Create enclosures and animals, then browse the collection.
         </p>
+        {userQuery.isPending && (
+          <p className="text-sm text-muted-foreground">Loading user…</p>
+        )}
+        {userQuery.isError && (
+          <p className="text-sm text-destructive">
+            {userQuery.error.message}
+          </p>
+        )}
+        {userQuery.data && (
+          <p className="text-sm text-muted-foreground">
+            Signed in as {userQuery.data.email} (DbUser id {userQuery.data.id})
+          </p>
+        )}
       </header>
 
       <div className="grid gap-6 md:grid-cols-2">

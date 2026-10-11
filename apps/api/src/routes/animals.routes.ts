@@ -15,6 +15,7 @@
 
 import { Router } from 'express';
 import { validateBody, validateParams } from '../middleware/validate.js';
+import { requireAuth } from '../middleware/require-auth.js';
 import {
   getAllAnimals,
   getAnimal,
@@ -50,4 +51,9 @@ animalsRouter.get('/', getAllAnimals);
 //   3. If valid   → getAnimal runs with req.params.id ALREADY a number
 animalsRouter.get('/:id', validateParams(animalIdParams), getAnimal);
 
-animalsRouter.post('/', validateBody(createAnimalBody), postAnimal);
+animalsRouter.post(
+  '/',
+  requireAuth,
+  validateBody(createAnimalBody),
+  postAnimal,
+);
