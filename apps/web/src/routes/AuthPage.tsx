@@ -2,9 +2,8 @@ import { AuthForm } from '@/components/AuthForm';
 
 export function AuthPage() {
   return (
-    <div>
-      <h1>Welcome to Habitat</h1>
+    <main className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <AuthForm />
-    </div>
+    </main>
   );
 }

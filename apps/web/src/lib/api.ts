@@ -116,10 +116,10 @@ export async function deleteEnclosure(enclosureId: number): Promise<void> {
   }
 }
 
-export async function fetchUser(): Promise<DbUser> {
+export async function fetchUser(): Promise<DbUser | null> {
   const token = await auth.currentUser?.getIdToken();
   if (!token) {
-    throw new Error('Not signed in');
+    return null;
   }
 
   const response = await fetch(`${apiUrl}/user/me`, {
