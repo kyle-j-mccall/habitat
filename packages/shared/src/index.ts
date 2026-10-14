@@ -32,10 +32,12 @@ export const animalSchema = z.object({
     commonName: z.string(),
   }),
   enclosureId: z.number().int().positive().nullable(),
-  enclosure: z.object({
-    id: z.number(),
-    name: z.string(),
-  }).nullable(),
+  enclosure: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+    })
+    .nullable(),
 });
 
 export const animalListSchema = z.array(animalSchema);
@@ -69,3 +71,24 @@ export const enclosureSchema = z.object({
 export const enclosureListSchema = z.array(enclosureSchema);
 
 export type Enclosure = z.infer<typeof enclosureSchema>;
+
+export const foodSchema = z.object({
+  name: z.string(),
+});
+
+export const foodListSchema = z.array(foodSchema);
+
+export type Food = z.infer<typeof foodSchema>;
+
+export const feedingEventSchema = z.object({
+  animalId: z.number().int().positive(),
+  foodId: z.number().int().positive(),
+  quantity: z.number().positive(),
+  fedAt: z.coerce.date(),
+  animal: animalSchema,
+  food: foodSchema,
+});
+
+export const feedingEventListSchema = z.array(feedingEventSchema);
+
+export type FeedingEvent = z.infer<typeof feedingEventSchema>;

@@ -1,12 +1,16 @@
 import { prisma } from '../lib/prisma.js';
 import type { CreateAnimalInput } from '@habitat/shared';
 
-export async function createAnimal(input: CreateAnimalInput) {
+export async function createAnimal(
+  input: CreateAnimalInput,
+  createdById: number,
+) {
   return prisma.animal.create({
     data: {
       name: input.name,
       speciesId: input.speciesId,
       enclosureId: input.enclosureId,
+      createdById,
     },
   });
 }
@@ -46,4 +50,4 @@ export async function deleteAnimal(id: number) {
   return prisma.animal.delete({
     where: { id },
   });
-} 
+}
