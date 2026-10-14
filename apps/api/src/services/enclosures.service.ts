@@ -1,9 +1,13 @@
 import { prisma } from '../lib/prisma.js';
 import type { Prisma } from '@prisma/client';
+import type { CreateEnclosureInput } from '@habitat/shared';
 
-export async function createEnclosure(data: Prisma.EnclosureCreateInput) {
+export async function createEnclosure(
+  input: CreateEnclosureInput,
+  createdById: number,
+) {
   return await prisma.enclosure.create({
-    data,
+    data: { ...input, createdById },
   });
 }
 

@@ -73,18 +73,44 @@ export const enclosureListSchema = z.array(enclosureSchema);
 export type Enclosure = z.infer<typeof enclosureSchema>;
 
 export const foodSchema = z.object({
+  id: z.number(),
   name: z.string(),
+  createdById: z.number().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export const foodListSchema = z.array(foodSchema);
 
 export type Food = z.infer<typeof foodSchema>;
 
+export const createFoodBody = z.object({
+  name: z.string().min(1),
+});
+
+export type CreateFoodInput = z.infer<typeof createFoodBody>;
+
+export const updateFoodBody = z.object({
+  name: z.string().min(1),
+});
+
+export type UpdateFoodInput = z.infer<typeof updateFoodBody>;
+
+export const addAnimalFoodBody = z.object({
+  foodId: z.number().int().positive(),
+});
+
+export type AddAnimalFoodInput = z.infer<typeof addAnimalFoodBody>;
+
 export const feedingEventSchema = z.object({
+  id: z.number(),
   animalId: z.number().int().positive(),
   foodId: z.number().int().positive(),
-  quantity: z.number().positive(),
+  amount: z.number().positive(),
+  notes: z.string().nullable(),
   fedAt: z.coerce.date(),
+  createdById: z.number(),
+  createdAt: z.coerce.date(),
   animal: animalSchema,
   food: foodSchema,
 });
@@ -92,3 +118,12 @@ export const feedingEventSchema = z.object({
 export const feedingEventListSchema = z.array(feedingEventSchema);
 
 export type FeedingEvent = z.infer<typeof feedingEventSchema>;
+
+export const createFeedingEventBody = z.object({
+  foodId: z.number().int().positive(),
+  amount: z.number().positive(),
+  notes: z.string().min(1).optional(),
+  fedAt: z.coerce.date().optional(),
+});
+
+export type CreateFeedingEventInput = z.infer<typeof createFeedingEventBody>;

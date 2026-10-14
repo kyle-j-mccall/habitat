@@ -30,7 +30,7 @@ export async function getEnclosure(
 
 export async function postEnclosure(req: Request<Record<string, never>, unknown, z.infer<typeof createEnclosureBody>>, res: Response, next: NextFunction) {
   try {
-    const enclosure = await EnclosuresService.createEnclosure(req.body);
+    const enclosure = await EnclosuresService.createEnclosure(req.body, req.user!.id);
     res.status(201).json(enclosure);
   } catch (error) {
     next(error);

@@ -37,7 +37,7 @@ export async function postAnimal(
   next: NextFunction,
 ) {
   try {
-    const animal = await AnimalsService.createAnimal(req.body);
+    const animal = await AnimalsService.createAnimal(req.body, req.user!.id);
     res.status(201).json(animal);
   } catch (error) {
     next(error);
