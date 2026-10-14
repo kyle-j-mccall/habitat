@@ -8,13 +8,17 @@ datasource db {
 }
 
 model DbUser {
-  id        Int      @id @default(autoincrement())
-  firebaseId String   @unique
-  firstName String?
-  lastName  String?
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  firebaseId    String         @unique
+  firstName     String?
+  lastName      String?
+  email         String         @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  animals       Animal[]
+  enclosures    Enclosure[]
+  foods         Food[]
+  feedingEvents FeedingEvent[]
 }
 
 model Species {
@@ -27,20 +31,62 @@ model Species {
 }
 
 model Animal {
-  id          Int      @id @default(autoincrement())
-  name        String
-  species     Species  @relation(fields: [speciesId], references: [id])
-  enclosure  Enclosure? @relation(fields: [enclosureId], references: [id], onDelete: SetNull)
-  enclosureId Int?
-  speciesId   Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  name          String
+  species       Species        @relation(fields: [speciesId], references: [id])
+  speciesId     Int
+  enclosure     Enclosure?     @relation(fields: [enclosureId], references: [id], onDelete: SetNull)
+  enclosureId   Int?
+  createdBy     DbUser         @relation(fields: [createdById], references: [id])
+  createdById   Int
+  animalFoods   AnimalFood[]
+  feedingEvents FeedingEvent[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Enclosure {
   id          Int      @id @default(autoincrement())
   name        String
   animals     Animal[]
+  createdBy   DbUser   @relation(fields: [createdById], references: [id])
+  createdById Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Food {
+  id          Int            @id @default(autoincrement())
+  name        String
+  createdBy   DbUser?        @relation(fields: [createdById], references: [id])
+  createdById Int?
+  animalFoods AnimalFood[]
+  events      FeedingEvent[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model AnimalFood {
+  animal    Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  animalId  Int
+  food      Food     @relation(fields: [foodId], references: [id])
+  foodId    Int
+  createdAt DateTime @default(now())
+
+  @@id([animalId, foodId])
+}
+
+model FeedingEvent {
+  id          Int      @id @default(autoincrement())
+  animal      Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  animalId    Int
+  food        Food     @relation(fields: [foodId], references: [id])
+  foodId      Int
+  amount      Float
+  notes       String?
+  fedAt       DateTime @default(now())
+  createdBy   DbUser   @relation(fields: [createdById], references: [id])
+  createdById Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
